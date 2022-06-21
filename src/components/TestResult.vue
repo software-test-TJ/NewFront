@@ -13,26 +13,23 @@
         max-height="300px"
         border
         id="out-table"
-        :data="triangleList"
+        :data="resultList"
         style="width: 90%"
         @selection-change="handleSelectionChange"
         :row-class-name="tableRowClassName"
         highlight-current-row
         @current-change="handleCurrentChange"
       >
-        <el-table-column type="selection" width="55"> </el-table-column>
-        <el-table-column prop="id" label="ID" width="40"> </el-table-column>
-        <el-table-column prop="a" label="边a" width="50"> </el-table-column>
-        <el-table-column prop="b" label="边b" width="50"> </el-table-column>
-        <el-table-column prop="c" label="边c" width="50"> </el-table-column>
-        <el-table-column prop="test_method" label="测试方法" width="100">
+        <el-table-column prop="case_id" label="ID" width="40"> </el-table-column>
+        <el-table-column prop="history_id" label="history_id" width="100">
         </el-table-column>
-        <el-table-column prop="middle_result" label="中间结果" width="100">
+        <el-table-column prop="test_time" label="test_time" width="100">
         </el-table-column>
-        <el-table-column prop="expected_result" label="预期结果" width="100">
+        <el-table-column prop="expected_output" label="预期结果" width="100">
         </el-table-column>
-        <el-table-column prop="real_result" label="实际结果" width="100">
+        <el-table-column prop="actual_output" label="实际结果" width="100">
         </el-table-column>
+        <el-table-column prop="accept" label="accept" width="50"> </el-table-column>
         <el-table-column prop="test_user" label="测试人员" width="100">
         </el-table-column>
         <el-table-column prop="test_date" label="测试时间" width="100">
@@ -72,23 +69,49 @@ import * as echarts from "echarts";
 
 import {excuteCases} from "../assets/data/excuteCases";
 import {mapState} from "_vuex@3.6.2@vuex";
+import axios from "_axios@0.27.2@axios";
 export default {
   name: "TestResult",
   data(){
     return {
       version_value:this.$route.params.version_value,
       multipleSelection:this.$route.params.multipleSelection,
-      triangleList: [],
+      resultList: [],
       currentRow: null,
       checkedData: [],
       onload: false
     }
   },
-  mounted() {
+  async mounted() {
+    this.$store.commit('saveHide', false)
     this.draw();
-    console.log('获取参数')
     console.log(this.$route.params)
-    excuteCases(this.$route.params.id,this.$route.params.version_value,this.$route.params.multipleSelection)
+    let version = this.$route.params.version_value
+    let id = parseInt(this.$route.params.id)
+    let that = this
+    if (id === 3) {
+      await axios.post("http://124.70.167.135:5001/computer/" + version, {
+        case_id_array: that.$route.params.multipleSelection
+      })
+        .then(function (response) {
+          console.info(response.data.data)//这里面是拿到的数据
+          if (response.data.data === []) {
+
+          } else {
+            // let keys = Object.keys(response.data.data[0]);
+            // console.log(keys)
+            console.log( response.data.data)
+            that.resultList=response.data.data
+            that.$store.commit('saveHide', true)
+          }
+        })
+        .catch(function (error) {
+          console.info(error)
+        })
+    }
+    else {
+      console.log("id不合法")
+    }
   },
   methods: {
     // Echarts画图

@@ -8,29 +8,12 @@ export default new Vuex.Store({
     test1:'',
     test2:'',
     id:'',
-    sideBarTitle:'三角形测试用例',
-    tableTitle:["A","B","C"],
-    tableData:[
-      {A:1,B:2,C:3},{A:4,B:1312,C:31231},{A:12131,B:2,C:3},
-    ],
-    historyTableData:[
-      {
-      date: '2022-05-31',
-      name: 'zch',
-      address: '上海市普陀区金沙江路 1518 弄'
-    }, {
-      date: '2022-05-31',
-      name: 'zch',
-      address: '上海市普陀区金沙江路 1518 弄'
-    },{
-      date: '2022-05-31',
-      name: 'zch',
-      address: '上海市普陀区金沙江路 1518 弄'
-    },{
-      date: '2022-05-31',
-      name: 'zch',
-      address: '上海市普陀区金沙江路 1518 弄'
-    }]
+    sideBarTitle:'',
+    tableTitle:[],
+    tableData:[],
+    historyTableData:[],
+    hide:true,
+    HistoryDetail:[]
   },
   mutations:{
     // 保存
@@ -54,6 +37,12 @@ export default new Vuex.Store({
     },
     saveHistoryTableData(state,historyTableData){
       state.historyTableData = historyTableData;
+    },
+    saveHide(state,hide){
+      state.hide = hide;
+    },
+    saveHistoryDetail(state,HistoryDetail){
+      state.HistoryDetail = HistoryDetail;
     },
   }
 })

@@ -5,6 +5,7 @@
       ref="multipleTable"
       :data="tableData"
       style="width: 100%"
+      height="200"
       tooltip-effect="dark"
       @selection-change="handleSelectionChange"
     >
@@ -27,6 +28,61 @@
         :label="tableTitle[2]"
         width="120"
         :property="tableTitle[2]"
+      ></el-table-column>
+      <el-table-column
+        :label="tableTitle[3]"
+        width="120"
+        :property="tableTitle[3]"
+      ></el-table-column>
+      <el-table-column
+        :label="tableTitle[4]"
+        width="120"
+        :property="tableTitle[4]"
+      ></el-table-column>
+      <el-table-column
+        :label="tableTitle[5]"
+        width="120"
+        :property="tableTitle[5]"
+      ></el-table-column>
+      <el-table-column
+        :label="tableTitle[6]"
+        width="120"
+        :property="tableTitle[6]"
+      ></el-table-column>
+      <el-table-column
+        :label="tableTitle[7]"
+        width="120"
+        :property="tableTitle[7]"
+      ></el-table-column>
+      <el-table-column
+        :label="tableTitle[8]"
+        width="120"
+        :property="tableTitle[8]"
+      ></el-table-column>
+      <el-table-column
+        :label="tableTitle[9]"
+        width="120"
+        :property="tableTitle[9]"
+      ></el-table-column>
+      <el-table-column
+        :label="tableTitle[10]"
+        width="120"
+        :property="tableTitle[10]"
+      ></el-table-column>
+      <el-table-column
+        :label="tableTitle[11]"
+        width="120"
+        :property="tableTitle[11]"
+      ></el-table-column>
+      <el-table-column
+        :label="tableTitle[12]"
+        width="120"
+        :property="tableTitle[12]"
+      ></el-table-column>
+      <el-table-column
+        :label="tableTitle[13]"
+        width="120"
+        :property="tableTitle[13]"
       ></el-table-column>
 
     </el-table>
@@ -60,10 +116,10 @@ export default {
     return {
       multipleSelection: [],
       version_options: [{
-        value: '选项1',
+        value: '1',
         label: '1.0'
       }, {
-        value: '选项2',
+        value: '2',
         label: '2.0'
       }],
       value: '',
@@ -93,7 +149,6 @@ export default {
       this.multipleSelection = val;
     },
     submitToResult(){
-      console.log('version_value',this.$store.state.id)
       let pass=true
       if(this.$data.value===''){
         pass=false
@@ -104,13 +159,17 @@ export default {
       if(!pass){
         this.$message({
           type: 'warning',
-          message: '请选择用例和输入版本信息'
+          message: '请选择输入版本信息或者选取用例'
         })
       }
       else {
+        let cases=[]
+        for (let i = 0; i <this.$data.multipleSelection.length ; i++) {
+          cases.push(this.$data.multipleSelection[i]["case_number"])
+        }
         this.$router.push({name:"result",params:{
-          'version_value':this.$data.value,
-            'multipleSelection':this.$data.multipleSelection,
+            'version_value':this.$data.value,
+            'multipleSelection':cases,
             'id':this.$store.state.id
           }})
       }

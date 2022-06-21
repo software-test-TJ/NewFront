@@ -1,5 +1,6 @@
 <template>
   <div id="container">
+    <loading v-if=!hide></loading>
     <el-col :span="4">
       <Sidebar></Sidebar>
     </el-col>
@@ -16,11 +17,13 @@ import Sidebar from "../components/Sidebar";
 import TestTitle from "../components/TestTitle";
 import TestTable from "../components/TestTable";
 import HistoryTable from "../components/HistoryTable";
+import {mapState} from "_vuex@3.6.2@vuex";
 export default {
   name: "index",
   data() {
     return {
       title: "",
+      hide:this.$store.state.hide
     };
   },
   components: {
@@ -30,7 +33,18 @@ export default {
     HistoryTable
   },
   methods: {
-  }
+  },
+  computed: {
+    getStoreItem () {
+      return this.$store.state.hide
+    }
+  },
+  watch: {
+    getStoreItem () {
+      this.hide=this.$store.state.hide
+    }
+  },
+
 }
 </script>
 

@@ -1,19 +1,33 @@
 <template>
   <div>
-<!--<Triangle></Triangle>-->
+    <loading v-if=!hide></loading>
     <TestResult></TestResult>
 </div>
 </template>
 
 <script>
 import TestResult from "../components/TestResult";
-import Test from "./test";
 export default {
   name: "result",
   components:{
-    Test,
     TestResult
-  }
+  },
+  data() {
+    return {
+      title: "",
+      hide:this.$store.state.hide
+    };
+  },
+  computed: {
+    getStoreItem () {
+      return this.$store.state.hide
+    }
+  },
+  watch: {
+    getStoreItem () {
+      this.hide=this.$store.state.hide
+    }
+  },
 }
 </script>
 
