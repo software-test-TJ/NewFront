@@ -6,7 +6,7 @@
     style="width: 100%">
     <el-table-column
       label="日期"
-      width="180">
+      width="200">
       <template slot-scope="scope">
         <i class="el-icon-time"></i>
         <span style="margin-left: 10px">{{ scope.row.start_time }}</span>
@@ -61,27 +61,108 @@ export default {
       let that=this
       let id=parseInt(this.$store.state.id)
       if(id===3)
-        console.log("!!!!!!!!!!!!!!!")
-      else console.log("?????????????????????????")
+      {
+        await axios.post("http://124.70.167.135:5001/computer/history/detail", {
+          history_id: row["id"]
+        })
+          .then(function (response) {
+            // console.info(response.data.data)//这里面是拿到的数据
+            if (response.data.data.length===0) {
+              that.$alert('历史信息为空',
+                '详细信息', {
+                  dangerouslyUseHTMLString: true
+                });
+            } else {
+              that.gridData=response.data.data
+              that.dialogTableVisible = true
+            }
+          })
+          .catch(function (error) {
+            // console.info(error)
+          })
+      }
+      else if(id===1){
+        await axios.post("http://124.70.167.135:5001/triangle/history/detail", {
+          history_id: row["id"]
+        })
+          .then(function (response) {
+            // console.info(response.data.data)//这里面是拿到的数据
+            if (response.data.data.length===0) {
+              that.$alert('历史信息为空',
+                '详细信息', {
+                  dangerouslyUseHTMLString: true
+                });
+            } else {
+              that.gridData=response.data.data
+              that.dialogTableVisible = true
+            }
+          })
+          .catch(function (error) {
+            // console.info(error)
+          })
+      }
+      else if(id===2){
+        await axios.post("http://124.70.167.135:5001/calendar/history/detail", {
+          history_id: row["id"]
+        })
+          .then(function (response) {
+            // console.info(response.data.data)//这里面是拿到的数据
+            if (response.data.data.length===0) {
+              that.$alert('历史信息为空',
+                '详细信息', {
+                  dangerouslyUseHTMLString: true
+                });
+            } else {
+              that.gridData=response.data.data
+              that.dialogTableVisible = true
+            }
+          })
+          .catch(function (error) {
+            // console.info(error)
+          })
+      }
+      else if(id===4){
+        await axios.post("http://124.70.167.135:5001/phone/history/detail", {
+          history_id: row["id"]
+        })
+          .then(function (response) {
+            // console.info(response.data.data)//这里面是拿到的数据
+            if (response.data.data.length===0) {
+              that.$alert('历史信息为空',
+                '详细信息', {
+                  dangerouslyUseHTMLString: true
+                });
+            } else {
+              that.gridData=response.data.data
+              that.dialogTableVisible = true
+            }
+          })
+          .catch(function (error) {
+            // console.info(error)
+          })
+      }
+      else {
+        await axios.post("http://124.70.167.135:5001/commission/history/detail", {
+          history_id: row["id"]
+        })
+          .then(function (response) {
+            // console.info(response.data.data)//这里面是拿到的数据
+            if (response.data.data.length===0) {
+              that.$alert('历史信息为空',
+                '详细信息', {
+                  dangerouslyUseHTMLString: true
+                });
+            } else {
+              that.gridData=response.data.data
+              that.dialogTableVisible = true
+            }
+          })
+          .catch(function (error) {
+            // console.info(error)
+          })
+      }
       console.log(row["id"]);
-      await axios.post("http://124.70.167.135:5001/computer/history/detail", {
-        history_id: row["id"]
-      })
-        .then(function (response) {
-          // console.info(response.data.data)//这里面是拿到的数据
-          if (response.data.data.length===0) {
-            that.$alert('历史信息为空',
-              '详细信息', {
-                dangerouslyUseHTMLString: true
-              });
-          } else {
-            that.gridData=response.data.data
-            that.dialogTableVisible = true
-          }
-        })
-        .catch(function (error) {
-          // console.info(error)
-        })
+
     },
     handleDelete(index, row) {
       console.log(index, row);

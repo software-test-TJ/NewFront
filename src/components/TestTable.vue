@@ -165,8 +165,10 @@ export default {
       else {
         let cases=[]
         for (let i = 0; i <this.$data.multipleSelection.length ; i++) {
-          cases.push(this.$data.multipleSelection[i]["case_number"])
+          cases.push(this.$data.multipleSelection[i]["id"])
         }
+        console.log("测试选择")
+        console.log(cases)
         this.$router.push({name:"result",params:{
             'version_value':this.$data.value,
             'multipleSelection':cases,

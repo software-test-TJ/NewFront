@@ -13,7 +13,8 @@ export default new Vuex.Store({
     tableData:[],
     historyTableData:[],
     hide:true,
-    HistoryDetail:[]
+    HistoryDetail:[],
+    resultShowTable: []
   },
   mutations:{
     // 保存
@@ -43,6 +44,9 @@ export default new Vuex.Store({
     },
     saveHistoryDetail(state,HistoryDetail){
       state.HistoryDetail = HistoryDetail;
+    },
+    saveResultShowTable(state,resultShowTable){
+      state.resultShowTable = resultShowTable;
     },
   }
 })

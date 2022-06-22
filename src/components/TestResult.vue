@@ -10,7 +10,7 @@
         </el-row>
       </div>
       <el-table
-        max-height="300px"
+        max-height="400px"
         border
         id="out-table"
         :data="resultList"
@@ -20,37 +20,24 @@
         highlight-current-row
         @current-change="handleCurrentChange"
       >
-        <el-table-column prop="case_id" label="ID" width="40"> </el-table-column>
-        <el-table-column prop="history_id" label="history_id" width="100">
+        <el-table-column prop="case_id" label="ID" > </el-table-column>
+        <el-table-column prop="history_id" label="history_id" >
         </el-table-column>
-        <el-table-column prop="test_time" label="test_time" width="100">
+        <el-table-column prop="test_time" label="test_time" >
         </el-table-column>
-        <el-table-column prop="expected_output" label="预期结果" width="100">
+        <el-table-column prop="expected_output" label="预期结果">
         </el-table-column>
-        <el-table-column prop="actual_output" label="实际结果" width="100">
+        <el-table-column prop="actual_output" label="实际结果" >
         </el-table-column>
-        <el-table-column prop="accept" label="accept" width="50"> </el-table-column>
-        <el-table-column prop="test_user" label="测试人员" width="100">
+        <el-table-column prop="accept" label="accept" > </el-table-column>
+        <el-table-column prop="test_user" label="测试人员" >
         </el-table-column>
-        <el-table-column prop="test_date" label="测试时间" width="100">
+        <el-table-column prop="test_date" label="测试时间">
         </el-table-column>
-        <el-table-column prop="env" label="坏境" width="100"> </el-table-column>
-        <el-table-column prop="version" label="版本" width="90">
+        <el-table-column prop="env" label="坏境"> </el-table-column>
+        <el-table-column prop="version" label="版本" >
         </el-table-column>
-        <el-table-column prop="status" label="测试状态" width="90">
-        </el-table-column>
-        <el-table-column label="操作" width="220px">
-          <template slot-scope="scope">
-            <el-button @click="handleClick(scope.row)" type="danger" size="small"
-            >删除</el-button
-            >
-            <el-button @click="handleClick(scope.row)" type="primary" size="small"
-            >修改</el-button
-            >
-            <el-button @click="handleClick(scope.row)" type="success" size="small"
-            >执行</el-button
-            >
-          </template>
+        <el-table-column prop="status" label="测试状态" >
         </el-table-column>
       </el-table>
 
@@ -66,10 +53,8 @@ import XLSX from "xlsx";
 
 // Echarts
 import * as echarts from "echarts";
-
-import {excuteCases} from "../assets/data/excuteCases";
-import {mapState} from "_vuex@3.6.2@vuex";
 import axios from "_axios@0.27.2@axios";
+
 export default {
   name: "TestResult",
   data(){
@@ -84,7 +69,6 @@ export default {
   },
   async mounted() {
     this.$store.commit('saveHide', false)
-    this.draw();
     console.log(this.$route.params)
     let version = this.$route.params.version_value
     let id = parseInt(this.$route.params.id)
@@ -103,6 +87,137 @@ export default {
             console.log( response.data.data)
             that.resultList=response.data.data
             that.$store.commit('saveHide', true)
+            let a=0
+            let b=0
+            for (let i = 0; i <that.resultList.length ; i++) {
+              if(parseInt(that.resultList[i]["accept"])===1)a=a+1
+              else b=b+1
+            }
+            that.$store.commit('saveResultShowTable', [{value: a, name: '正确'},
+              {value: b, name: '错误'}])
+            console.log( that.$store.state.resultShowTable)
+            that.draw()
+          }
+        })
+        .catch(function (error) {
+          console.info(error)
+        })
+    }
+    else if(id===1){
+      console.log( that.$route.params.multipleSelection)
+      await axios.post("http://124.70.167.135:5001/triangle/" + version, {
+        case_id_array: that.$route.params.multipleSelection
+      })
+        .then(function (response) {
+          console.info(response.data.data)//这里面是拿到的数据
+          if (response.data.data === []) {
+
+          } else {
+            // let keys = Object.keys(response.data.data[0]);
+            // console.log(keys)
+            console.log( response.data.data)
+            that.resultList=response.data.data
+            that.$store.commit('saveHide', true)
+            let a=0
+            let b=0
+            for (let i = 0; i <that.resultList.length ; i++) {
+              if(parseInt(that.resultList[i]["accept"])===1)a=a+1
+              else b=b+1
+            }
+            that.$store.commit('saveResultShowTable', [{value: a, name: '正确'},
+              {value: b, name: '错误'}])
+            console.log( that.$store.state.resultShowTable)
+            that.draw()
+          }
+        })
+        .catch(function (error) {
+          console.info(error)
+        })
+    }
+    else if(id===2){
+      await axios.post("http://124.70.167.135:5001/calendar/" + version, {
+        case_id_array: that.$route.params.multipleSelection
+      })
+        .then(function (response) {
+          console.info(response.data.data)//这里面是拿到的数据
+          if (response.data.data === []) {
+
+          } else {
+            // let keys = Object.keys(response.data.data[0]);
+            // console.log(keys)
+            console.log( response.data.data)
+            that.resultList=response.data.data
+            that.$store.commit('saveHide', true)
+            let a=0
+            let b=0
+            for (let i = 0; i <that.resultList.length ; i++) {
+              if(parseInt(that.resultList[i]["accept"])===1)a=a+1
+              else b=b+1
+            }
+            that.$store.commit('saveResultShowTable', [{value: a, name: '正确'},
+              {value: b, name: '错误'}])
+            console.log( that.$store.state.resultShowTable)
+            that.draw()
+          }
+        })
+        .catch(function (error) {
+          console.info(error)
+        })
+    }
+    else if(id===4){
+      await axios.post("http://124.70.167.135:5001/phone/" + version, {
+        case_id_array: that.$route.params.multipleSelection
+      })
+        .then(function (response) {
+          console.info(response.data.data)//这里面是拿到的数据
+          if (response.data.data === []) {
+
+          } else {
+            // let keys = Object.keys(response.data.data[0]);
+            // console.log(keys)
+            console.log( response.data.data)
+            that.resultList=response.data.data
+            that.$store.commit('saveHide', true)
+            let a=0
+            let b=0
+            for (let i = 0; i <that.resultList.length ; i++) {
+              if(parseInt(that.resultList[i]["accept"])===1)a=a+1
+              else b=b+1
+            }
+            that.$store.commit('saveResultShowTable', [{value: a, name: '正确'},
+              {value: b, name: '错误'}])
+            console.log( that.$store.state.resultShowTable)
+            that.draw()
+          }
+        })
+        .catch(function (error) {
+          console.info(error)
+        })
+    }
+  else if(id===6){
+      await axios.post("http://124.70.167.135:5001/commission/" + version, {
+        case_id_array: that.$route.params.multipleSelection
+      })
+        .then(function (response) {
+          console.info(response.data.data)//这里面是拿到的数据
+          if (response.data.data === []) {
+
+          } else {
+            // let keys = Object.keys(response.data.data[0]);
+            // console.log(keys)
+            console.log( response.data.data)
+            that.resultList=response.data.data
+            that.$store.commit('saveHide', true)
+            let a=0
+            let b=0
+            for (let i = 0; i <that.resultList.length ; i++) {
+              if(parseInt(that.resultList[i]["accept"])===1)a=a+1
+              else b=b+1
+            }
+            that.$store.commit('saveResultShowTable', [{value: a, name: '正确'},
+              {value: b, name: '错误'}])
+            console.log( that.$store.state.resultShowTable)
+            that.draw()
           }
         })
         .catch(function (error) {
@@ -116,26 +231,43 @@ export default {
   methods: {
     // Echarts画图
     draw() {
-      // 基于准备好的dom，初始化echarts实例
-      var myChart = echarts.init(document.getElementById("main"));
-      // 绘制图表
-      myChart.setOption({
-        title: {
-          text: "边界值分析统计",
+      var chartDom = document.getElementById('main');
+      var myChart = echarts.init(chartDom);
+      var option;
+
+      option = {
+        tooltip: {
+          trigger: 'item'
         },
-        tooltip: {},
-        xAxis: {
-          data: ["基本", "健壮性", "最坏情况", "健壮最坏"],
+        legend: {
+          top: '5%',
+          left: 'center'
         },
-        yAxis: {},
         series: [
           {
-            name: "测试用例数",
-            type: "bar",
-            data: [5, 20, 36, 10],
-          },
-        ],
-      });
+            name: 'Access From',
+            type: 'pie',
+            radius: ['40%', '70%'],
+            avoidLabelOverlap: false,
+            label: {
+              show: false,
+              position: 'center'
+            },
+            emphasis: {
+              label: {
+                show: true,
+                fontSize: '40',
+                fontWeight: 'bold'
+              }
+            },
+            labelLine: {
+              show: false
+            },
+            data: this.$store.state.resultShowTable
+          }
+        ]
+      }
+      option && myChart.setOption(option);
     },
     // 批量执行
     batchExecute() {
@@ -167,7 +299,7 @@ export default {
           //返回一个新创建的 Blob 对象，其内容由参数中给定的数组串联组成。
           new Blob([wbout], { type: "application/octet-stream" }),
           //设置导出文件名称
-          "TriangleTest.xlsx"
+          "Test.xlsx"
         );
       } catch (e) {
         if (typeof console !== "undefined") console.log(e, wbout);
@@ -210,17 +342,7 @@ export default {
       this.$router.push({name:'index'})
     }
   },
-  created() {
-    // 发送获取数据
-    fetch("http://localhost:5000/triangle", {
-      method: "get",
-    })
-      .then((res) => res.json())
-      .then((res) => {
-        // console.log("data:", res);
-        this.triangleList = res.data;
-      });
-  },
+  created() {}
 }
 </script>
 
@@ -237,8 +359,8 @@ export default {
 
 #main {
   margin-top: 5px;
-  width: 400px;
-  height: 240px;
+  width: 700px;
+  height: 700px;
 }
 
 .el-table .success-row {
